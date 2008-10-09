@@ -1,4 +1,4 @@
-#User guide for protobuf-mercury
+== under construction ==
 
 = Introduction =
 
@@ -6,7 +6,7 @@ The program mprotoc generates a Mercury API for a binary protocol defined in a .
 
 = Installation =
 
-Download http://protobuf-mercury.googlecode.com/files/protobuf-mercury-0.1.tar.gz, untar it (`tar -xzf protobuf-mercury-0.1.tar.gz`) and then see the README file.
+Download http://protobuf-mercury.googlecode.com/files/protobuf-mercury-0.1.tar.gz, do `tar -xzf protobuf-mercury-0.1.tar.gz` and follow the instructions in the README file.
 
 = Using mprotoc =
 
@@ -39,7 +39,33 @@ the following Mercury type will be generated:
 }}}
 Note that each value has the enumeration name as a prefix.  This is to avoid ambiguities.
 
-For each message a Mercury type with the same fields as the message is generated.  The type has the same name as the message except that camel case identifiers are converted to lowercase with underscores.  Nested messages have their ancestor message names prepended to the generated type name.  Fields are similarly named with the message name and any ancestor message names prepended to the field name.
+For a message such as:
+{{{
+message Person {
+    required int32 id = 1;
+    required string name = 2;
+    required Gender gender = 3;
+    required double double= 4;
+    optional string email = 5;
+    optional MaritalStatus marital_status = 6 [default = SINGLE];
+    repeated Person children = 7;
+}
+}}}
+the following type is generated:
+{{{
+:- type person
+    --->    person(
+                person_id :: int,
+                person_name :: string,
+                person_gender :: gender,
+                person_double :: float,
+                person_email :: maybe(string),
+                person_marital_status :: maybe(marital_status),
+                person_children :: list(person)
+            ).
+}}}
+
+The generated type has the same name as the message except that camel case identifiers are converted to lowercase with underscores.  Nested messages have their ancestor message names prepended to the generated type name.  Fields are similarly named with the message name and any ancestor message names prepended to the field name.
 
 Protobuf types are mapped to Mercury types according to the following table:
 
@@ -51,5 +77,7 @@ Protobuf types are mapped to Mercury types according to the following table:
 || bool            || bool           ||
 || string          || string         ||
 || bytes           || bitmap         ||
+
+Repeated fields are wrapped in the `list` type and optional fields are wrapped in the maybe type.
 
 = Limitations =
