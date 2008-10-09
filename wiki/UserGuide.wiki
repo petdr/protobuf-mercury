@@ -1,0 +1,13 @@
+#User guide for protobuf-mercury
+
+= Introduction =
+
+The program mprotoc generates a Mercury API for a binary protocol defined in a .proto file.  This guide explains how to use mprotoc and the generated API.
+
+= Installation =
+
+Download 
+
+= The generated API =
+
+= Limitations =
