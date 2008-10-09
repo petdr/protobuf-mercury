@@ -6,8 +6,50 @@ The program mprotoc generates a Mercury API for a binary protocol defined in a .
 
 = Installation =
 
-Download 
+Download http://protobuf-mercury.googlecode.com/files/protobuf-mercury-0.1.tar.gz, untar it (`tar -xzf protobuf-mercury-0.1.tar.gz`) and then see the README file.
 
-= The generated API =
+= Using mprotoc =
+
+To generate a Mercury API for a protocol defined in myproto.proto, execute the command `mprotoc --out . myproto.proto`.  This will cause the file `myproto.m` to be generated.  At the moment the generated module always has the same name as the .proto file. 
+
+= The generated module =
+
+For each message and enumeration in the .proto file, mprotoc generates a Mercury type and makes this type an instance of either the pb_message or pb_enumeration typeclass.
+
+For an enumeration such as:
+{{{
+enum Colour {
+    RED = 0;
+    BLUE = 1;
+    GREEN = 2;
+    MAGENTA = 3;
+    CYAN = 4;
+    YELLOW = 5;
+}
+}}}
+the following Mercury type will be generated:
+{{{
+:- type colour
+    --->    colour_red
+    ;       colour_blue
+    ;       colour_green
+    ;       colour_magenta
+    ;       colour_cyan
+    ;       colour_yellow.
+}}}
+Note that each value has the enumeration name as a prefix.  This is to avoid ambiguities.
+
+For each message a Mercury type with the same fields as the message is generated.  The type has the same name as the message except that camel case identifiers are converted to lowercase with underscores.  Nested messages have their ancestor message names prepended to the generated type name.  Fields are similarly named with the message name and any ancestor message names prepended to the field name.
+
+Protobuf types are mapped to Mercury types according to the following table:
+
+|| *protobuf type* || *Mercury type* ||
+|| double          || float          ||
+|| int32           || int            ||
+|| sint32          || int            ||
+|| sfixed32        || int            ||
+|| bool            || bool           ||
+|| string          || string         ||
+|| bytes           || bitmap         ||
 
 = Limitations =
