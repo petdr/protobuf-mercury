@@ -8,7 +8,7 @@ Download http://protobuf-mercury.googlecode.com/files/protobuf-mercury-0.1.tar.g
 
 = Using mprotoc =
 
-To generate a Mercury API for a protocol defined in myproto.proto, execute the command `mprotoc --out . myproto.proto`.  This will cause the file `myproto.m` to be generated.  At the moment the generated module always has the same name as the .proto file. 
+To generate a Mercury API for a protocol defined in myproto.proto, execute the command `mprotoc --out . myproto.proto`.  This will cause the file `myproto.m` to be generated in the current directory.  At the moment the generated module always has the same name as the .proto file. 
 
 = The generated module =
 
