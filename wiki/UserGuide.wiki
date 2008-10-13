@@ -83,11 +83,24 @@ In addition a function is generated for each optional field.  This function take
 
 = `protobuf_runtime.m` =
 
-Generated enumeration types are made instances of the `pb_enumeration` typeclass and generated message types are made instances of the `pb_message` typeclass.  These typeclasses are defined in protobuf_runtime.m which is imported by all generated modules. 
+Generated enumeration types are made instances of the `pb_enumeration` typeclass and generated message types are made instances of the `pb_message` typeclass.  These typeclasses are defined in `protobuf_runtime.m` which is imported by all generated modules. 
 
 Most of the methods of these typeclasses are of no interest to users of the API.  There is however one method on the `pb_message` typeclass that may be useful in user code.  This is the `init_message` method which returns a message with all optional fields set to `no`, all repeated fields set to `[]` and all required fields set to an appropriate default value for the type (numeric fields are initialized to zero, string fields are initialized to the empty string and embedded messages are initialized with their `init_message` method).
 
-`protobuf_runtime.m` also contains instances of the standard `stream.reader` and `stream.writer`
+`protobuf_runtime.m` also contains instances of the standard `stream.reader` and `stream.writer` typeclasses which can be used to read and write messages to and from binary streams.
+
+{{{
+:- type limit == int.
+
+:- type pb_reader(S)
+    --->    pb_reader(S, limit).
+}}}
+
+`pb_reader/1` is an instance of stream reader.  The first argument is the underlying stream to read from.  This stream should be able to read bytes.  The second argument is how many bytes to read before giving up.  This can be used to limit the size of messages.
+
+Here is an example of how to read a message from a byte stream:
+{{{
+}}}
 
 = Limitations of the current implementation =
 
