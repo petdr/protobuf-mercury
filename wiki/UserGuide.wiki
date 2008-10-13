@@ -96,13 +96,21 @@ Most of the methods of these typeclasses are of no interest to users of the API.
     --->    pb_reader(S, limit).
 }}}
 
-`pb_reader/1` is an instance of `stream.reader`.  The first argument is the underlying stream to read from.  This stream should be able to read bytes.  The second argument is how many bytes to read before giving up.  This can be used to limit the size of messages.
+`pb_reader/1` is an instance of `stream.reader`.  The first argument is the underlying stream to read from.  This stream should be able to read bytes.  The second argument is how many bytes to read before giving up.  This can be used to limit the size of read messages.
 
 Here is an example of how to read a message from a byte stream with a limit of 10000 bytes:
 {{{
     stream.get(pb_reader(Stream, 10000), GetRes, !IO),
-    ( GetRes = ok(pb_message(Person)),
+    (
+        GetRes = ok(pb_message(Person)),
         % Do something with Person...
+    ;
+        GetRes = error(Error),
+        % Handle read error ...
+    ;
+        GetRes = eof,
+        % Handle eof...
+    )
 }}}
 Note that the read message is wrapped in a `pb_message` functor.
 
@@ -118,7 +126,7 @@ Here is an example of its use:
 stream.put(pb_writer(Stream), pb_message(Person), !IO)
 }}}
 
-Note again that the message needs to be wrapped in a `pb_message` functor, before being written.
+Note again that the message needs to be wrapped in a `pb_message` functor before being written.
 
 For more examples see the `samples` directory in the source distribution.
 
