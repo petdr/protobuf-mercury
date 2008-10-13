@@ -82,7 +82,7 @@ In addition a function is generated for each optional field.  This function take
 
 Generated enumeration types are made instances of the `pb_enumeration` typeclass and generated message types are made instances of the `pb_message` typeclass.  These typeclasses are defined in protobuf_runtime.m which is imported by all generated modules. 
 
-Most of the methods of these typeclasses are of no interest to users of the API.  There is however on method on the `pb_message` typeclass that may be useful in user code.  This is the `init_method` method which returns a message with all optional fields set to `no`, all repeated fields set to `[]` and all required fields set to an appropriate default value for the type (numeric fields are initialized to zero, string fields are initialized to the empty string and embedded messages are initialized with their `init_message` method).
+Most of the methods of these typeclasses are of no interest to users of the API.  There is however one method on the `pb_message` typeclass that may be useful in user code.  This is the `init_message` method which returns a message with all optional fields set to `no`, all repeated fields set to `[]` and all required fields set to an appropriate default value for the type (numeric fields are initialized to zero, string fields are initialized to the empty string and embedded messages are initialized with their `init_message` method).
 
 = Limitations of the current implementation =
 
