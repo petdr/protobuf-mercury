@@ -14,7 +14,7 @@ To generate a Mercury API for a protocol defined in myproto.proto, execute the c
 
 = The generated module =
 
-For each message and enumeration in the .proto file, mprotoc generates a Mercury type and makes this type an instance of either the pb_message or pb_enumeration typeclass.
+For each message and enumeration in the .proto file, mprotoc generates a Mercury type. 
 
 For an enumeration such as:
 {{{
@@ -65,7 +65,7 @@ the following type is generated:
             ).
 }}}
 
-The generated type has the same name as the message except that camel case identifiers are converted to lowercase with underscores.  Nested messages have their ancestor message names prepended to the generated type name.  Fields are similarly named with the message name and any ancestor message names prepended to the field name.
+The generated type has the same name as the message except that camel case identifiers are converted to lowercase with underscores.  Nested messages have their ancestor message names prepended to the generated type name.  Fields are similarly named with the message name and any ancestor message names prepended to the field name.  Again this is to avoid ambiguities.
 
 Protobuf types are mapped to Mercury types according to the following table:
 
@@ -78,6 +78,10 @@ Protobuf types are mapped to Mercury types according to the following table:
 || string          || string         ||
 || bytes           || bitmap         ||
 
-Repeated fields are wrapped in the `list` type and optional fields are wrapped in the maybe type.
+Repeated fields are wrapped in the `list` type and optional fields are wrapped in the `maybe` type.
+
+In addition a function is generated for each optional field.  This function takes the message type as its sole input and returns the value of the optional fiels if it is set, or the default value if it is not set.  It has the same name as the field with the suffix '_or_default'.
+
+Generated enumeration types are made instances of the `pb_enumeration` typeclass and generated message types are made instances of the `pb_message` typeclass.  These typeclasses are defined in protobuf_runtime.m which is imported by all generated modules.  Most of the methods of these typeclasses are of no interest to users of the API.  There is however on method on the `pb_message` typeclass that may be useful in user code.  This is the `init_method` method which returns a message with all optional fields set to `no`, all repeated fields set to `[]` and all required fields set to an appropriate default value for the type (numeric fields are initialized to zero, string fields are initialized to the empty string and embedded messages are initialized with their `init_message` method).
 
 = Limitations =
